@@ -16,6 +16,7 @@ namespace CPSBlocker.Plugin
     {
         private const string BlockStandardVarName = "cpsb_BlockStandardHarnessAgents";
         private const string BlockGitHubCopilotVarName = "cpsb_BlockGitHubCopilotHarnessAgents";
+        private const string BlockSolutionImportedVarName = "cpsb_BlockSolutionImportedAgents";
         private const string CustomMessageVarName = "cpsb_AgentCreationBlockedMessage";
 
         private const string GitHubCopilotTemplatePrefix = "cliagent";
@@ -68,10 +69,38 @@ namespace CPSBlocker.Plugin
                 return;
             }
 
+            // Agents that arrive through a solution import (e.g. Microsoft first-party agents shipped via
+            // managed solutions) are exempt unless the admin explicitly opts in to blocking them too.
+            if (IsSolutionImportContext(context)
+                && !GetBooleanEnvironmentVariable(service, localPluginContext, BlockSolutionImportedVarName))
+            {
+                localPluginContext.Trace("Skipping: bot Create is part of a solution import and import blocking is disabled.");
+                return;
+            }
+
             string customMessage = GetStringEnvironmentVariable(service, localPluginContext, CustomMessageVarName);
             string message = BuildErrorMessage(blockStandard, blockGitHubCopilot, customMessage);
 
             throw new InvalidPluginExecutionException(message);
+        }
+
+        /// <summary>
+        /// Detects whether the current Create is running as part of a solution import by walking the
+        /// plugin execution context parent chain for an ImportSolution message. Solution-imported
+        /// agents (including Microsoft first-party agents) must not be blocked.
+        /// </summary>
+        private static bool IsSolutionImportContext(IPluginExecutionContext context)
+        {
+            for (IPluginExecutionContext ctx = context; ctx != null; ctx = ctx.ParentContext)
+            {
+                string message = ctx.MessageName ?? string.Empty;
+                if (message.StartsWith("ImportSolution", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static string BuildErrorMessage(bool blockStandard, bool blockGitHubCopilot, string customMessage)

@@ -43,6 +43,8 @@ var envVars = new (string SchemaName, string DisplayName, int Type, string Defau
         "When Yes, blocks creation of Standard Harness (Copilot Studio) agents."),
     ("cpsb_BlockGitHubCopilotHarnessAgents", "Block GitHub Copilot Harness Agents", 100000002 /*Boolean*/, "false",
         "When Yes, blocks creation of GitHub Copilot Harness (CLI) agents."),
+    ("cpsb_BlockSolutionImportedAgents", "Block Solution-Imported Agents", 100000002 /*Boolean*/, "false",
+        "When Yes, also blocks agents that arrive through a solution import (including Microsoft first-party agents). Default No exempts them."),
     ("cpsb_AgentCreationBlockedMessage", "Agent Creation Blocked Message", 100000000 /*String*/,
         "Please contact your Power Platform administrator if you require an exception.",
         "Custom message appended to the blocking error shown to the maker."),

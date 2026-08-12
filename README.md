@@ -11,7 +11,7 @@ The plug-in runs synchronously during `PreValidation` of `Create` on the `bot` t
 > **Disclaimer:** Although I work at Microsoft, this asset was created by me in a personal capacity and is not an official Microsoft product or supported Microsoft solution. Microsoft does not provide support for it. Treat this asset as a temporary workaround, evaluate it carefully for your environment, and replace it with a supported solution when one becomes available.
 
 > [!WARNING]
-> Enabling this plug-in can also block the creation or provisioning of Microsoft first-party agents that are rolled out directly by Microsoft, including agents delivered through products such as Dynamics 365. Evaluate this impact before enabling either blocking setting.
+> This plug-in only blocks agents created **interactively** (for example, manually in Copilot Studio). By default, agents that arrive through a **solution import** — including Microsoft first-party agents delivered through products such as Dynamics 365 — are detected via the `ImportSolution` execution context and are **not** blocked. You can opt in to blocking those too with the `cpsb_BlockSolutionImportedAgents` environment variable. If you provision agents through other automated paths, validate that they are not affected before enabling any blocking setting.
 
 ## Prerequisites
 
@@ -33,9 +33,10 @@ Set current values for these environment variables in the imported or registered
 | --- | --- | --- |
 | `cpsb_BlockStandardHarnessAgents` | `false` | Blocks Standard Harness agent creation when enabled. |
 | `cpsb_BlockGitHubCopilotHarnessAgents` | `false` | Blocks GitHub Copilot Harness agent creation when enabled. |
+| `cpsb_BlockSolutionImportedAgents` | `false` | When enabled, also blocks agents created through a solution import (including Microsoft first-party agents). Leave `false` to exempt solution-imported agents. |
 | `cpsb_AgentCreationBlockedMessage` | Contact-administrator message | Appends custom guidance to the error shown to the maker. |
 
-Both blocking settings default to `false`; importing or registering the solution does not block agent creation until at least one is enabled.
+Both harness blocking settings default to `false`; importing or registering the solution does not block agent creation until at least one is enabled. Solution-imported agents are exempt unless `cpsb_BlockSolutionImportedAgents` is enabled.
 
 ![Environment variable configuration](assets/variable_setup.png)
 
