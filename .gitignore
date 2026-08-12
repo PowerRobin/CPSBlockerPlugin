@@ -1,0 +1,25 @@
+# Build output
+**/bin/
+**/obj/
+**/publish/
+TestResults/
+
+# Visual Studio and VS Code user state
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build and diagnostic files
+*.binlog
+*.log
+bot_dump.txt
+ghcopilot_bot*.txt
+myroles.txt
+templates.txt
+
+# Operating system files
+.DS_Store
+Thumbs.db
