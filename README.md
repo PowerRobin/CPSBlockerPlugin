@@ -7,6 +7,12 @@ A Dataverse plug-in that controls whether makers can create Copilot Studio agent
 
 The plug-in runs synchronously during `PreValidation` of `Create` on the `bot` table, so blocked agents are rejected before they are created.
 
+> [!IMPORTANT]
+> **Disclaimer:** Although I work at Microsoft, this asset was created by me in a personal capacity and is not an official Microsoft product or supported Microsoft solution. Microsoft does not provide support for it. Treat this asset as a temporary workaround, evaluate it carefully for your environment, and replace it with a supported solution when one becomes available.
+
+> [!WARNING]
+> Enabling this plug-in can also block the creation or provisioning of Microsoft first-party agents that are rolled out directly by Microsoft, including agents delivered through products such as Dynamics 365. Evaluate this impact before enabling either blocking setting.
+
 ## Prerequisites
 
 - System Administrator permissions in the target environment (specififcally check for )
